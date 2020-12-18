@@ -17,17 +17,21 @@ def connectBS():
     _ = wlan.active(True)
     if not wlan.isconnected():
         print('connecting to network...')
-        attempt_counter=0
-        wlan.connect('bs', 'Freising+Salat')
+        attempt_counter=60
+        wlan.connect('bs', '***')
         while not wlan.isconnected():
-            attempt_counter = attempt_counter +1
-            if attempt_counter > 600:     # 10 sec
-                raise Exception("Can not connect")
+            utime.sleep_ms(100)
+            print(str(attempt_counter))
+            attempt_counter -=1
+            if attempt_counter == 0:     # 10 sec
+                break
+        if attempt_counter > 0:
+            return str(wlan.ifconfig())
 
-            time.sleep_ms(50)
+        return "False"
 
     #print('network config:', wlan.ifconfig())
-    return str(wlan.ifconfig())
+
 
 def mailHome(subject , message, user='bs@oekobox-online.de', to='jknopf@gmx.de'):
     """Wlan should be connected here"""
